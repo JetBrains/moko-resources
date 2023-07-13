@@ -15,6 +15,19 @@ plugins {
     id("publication-convention")
 }
 
+repositories {
+    mavenCentral()
+    google()
+
+    gradlePluginPortal()
+    maven("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/dev/")
+    maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+}
+
+compose {
+    kotlinCompilerPlugin.set("0.0.0-1.9.20-dev-6336")
+}
+
 android {
     defaultConfig {
         minSdk = 21

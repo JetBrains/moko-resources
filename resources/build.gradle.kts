@@ -12,6 +12,14 @@ plugins {
     id("publication-convention")
 }
 
+repositories {
+    mavenCentral()
+    google()
+
+    gradlePluginPortal()
+    maven("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/dev/")
+}
+
 kotlin {
     sourceSets {
         getByName("jsMain") {
