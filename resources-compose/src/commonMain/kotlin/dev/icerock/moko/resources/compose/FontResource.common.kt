@@ -11,12 +11,12 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import dev.icerock.moko.resources.FontResource
 
-/*@Composable
+@Composable
 fun fontFamilyResource(fontResource: FontResource): FontFamily {
     return fontResource.asFont()
         ?.let { FontFamily(it) }
         ?: FontFamily.Default
-}*/
+}
 
 @Composable
 expect fun FontResource.asFont(
