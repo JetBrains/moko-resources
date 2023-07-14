@@ -19,6 +19,14 @@ buildscript {
     }
 }
 
+repositories {
+    mavenCentral()
+    google()
+
+    gradlePluginPortal()
+    maven("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/dev/")
+}
+
 allprojects {
     plugins.withId("org.gradle.maven-publish") {
         group = "dev.icerock.moko"
