@@ -32,4 +32,13 @@ allprojects {
         group = "dev.icerock.moko"
         version = moko.versions.resourcesVersion.get()
     }
+
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile>().configureEach {
+        kotlinOptions {
+            freeCompilerArgs += listOf(
+                    "-opt-in",
+                    "kotlinx.cinterop.ExperimentalForeignApi",
+            )
+        }
+    }
 }
