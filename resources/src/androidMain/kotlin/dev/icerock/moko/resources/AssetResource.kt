@@ -5,15 +5,12 @@
 package dev.icerock.moko.resources
 
 import android.content.Context
-import android.os.Parcelable
-import dev.icerock.moko.parcelize.Parcelize
 import kotlinx.parcelize.IgnoredOnParcel
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
 
-@Parcelize
-actual class AssetResource(val path: String) : Parcelable {
+actual class AssetResource(val path: String) {
 
     fun getInputStream(context: Context): InputStream {
         return context.assets.open(path)
