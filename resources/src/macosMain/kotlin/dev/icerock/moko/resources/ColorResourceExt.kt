@@ -7,11 +7,12 @@ package dev.icerock.moko.resources
 import platform.AppKit.NSColor
 
 fun ColorResource.getNSColor(): NSColor {
-    return NSColor.colorNamed(
+    return NSColor.colorNamed("magenta")!!
+/*    return NSColor.colorNamed(
         name = this.name,
         bundle = this.bundle
     ) ?: throw IllegalStateException(
         "Can't read color $name from bundle $bundle, " +
                 "please check moko-resources gradle configuration"
-    )
+    )*/
 }
