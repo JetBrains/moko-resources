@@ -3,7 +3,9 @@
  */
 
 plugins {
-    id("org.jetbrains.kotlin.jvm") version ("1.8.10")
+    println("kgp version from resources-generator")
+    println(libs.kotlinGradlePlugin.get().version)
+    id("org.jetbrains.kotlin.jvm") version (libs.kotlinGradlePlugin.get().version)
     id("detekt-convention")
     id("publication-convention")
     id("com.gradle.plugin-publish") version ("1.2.0")
