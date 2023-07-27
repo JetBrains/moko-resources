@@ -18,6 +18,10 @@ dependencyResolutionManagement {
         create("moko") {
             from(files("gradle/moko.versions.toml"))
         }
+        create("libs") {
+            val compose_mpp_version: String? by settings
+            compose_mpp_version?.also {version("composeJetbrainsVersion", it) } //rewrites version from .toml
+        }
     }
 }
 
