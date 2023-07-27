@@ -25,7 +25,8 @@ repositories {
 }
 
 compose {
-    kotlinCompilerPlugin.set("0.0.0-1.9.20-dev-6336")
+    val compose_compiler_version: String? by project
+    compose_compiler_version?.let { kotlinCompilerPlugin.set(it) }
 }
 
 android {
