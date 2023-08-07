@@ -28,7 +28,7 @@ repositories {
 
 compose {
     val compose_compiler_version: String? by project
-    compose_compiler_version?.let { kotlinCompilerPlugin.set(it) }
+    compose_compiler_version?.let { kotlinCompilerPlugin.set("org.jetbrains.kotlin.experimental.compose:compiler:$it") }
 }
 
 android {
