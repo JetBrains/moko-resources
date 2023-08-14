@@ -10,12 +10,24 @@ buildscript {
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
 
         gradlePluginPortal()
+        val kotlin_repo_url: String? by project
+        kotlin_repo_url?.also { maven(it) }
     }
     dependencies {
         classpath("dev.icerock.moko:resources-generator")
         classpath(libs.composeJetBrainsPlugin)
         classpath(":resources-build-logic")
     }
+}
+
+repositories {
+    mavenCentral()
+    google()
+
+    gradlePluginPortal()
+    maven("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/dev/")
+    val kotlin_repo_url: String? by project
+    kotlin_repo_url?.also { maven(it) }
 }
 
 allprojects {

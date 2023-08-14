@@ -22,6 +22,8 @@ repositories {
     gradlePluginPortal()
     maven("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/dev/")
     maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+    val kotlin_repo_url: String? by project
+    kotlin_repo_url?.also { maven(it) }
 }
 
 compose {
