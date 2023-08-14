@@ -17,6 +17,8 @@ repositories {
 
     gradlePluginPortal()
     maven("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/dev/")
+    val kotlin_repo_url: String? by project
+    kotlin_repo_url?.also { maven(it) }
 }
 
 android {
