@@ -35,6 +35,20 @@ allprojects {
         group = "dev.icerock.moko"
         version = moko.versions.resourcesVersion.get()
     }
+
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile>().configureEach {
+        kotlinOptions {
+            freeCompilerArgs += listOf(
+                    "-opt-in",
+                    "kotlinx.cinterop.ExperimentalForeignApi",
+            )
+        }
+    }
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile>().configureEach { // for JS
+        compilerOptions {
+            freeCompilerArgs.add("-Xpartial-linkage-loglevel=ERROR")
+        }
+    }
 }
 
 // required for nexus plugin

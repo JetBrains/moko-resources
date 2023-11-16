@@ -39,6 +39,13 @@ kotlin {
             }
         }
     }
+    targets.all { // for Native
+        compilations.all {
+            compilerOptions.configure {
+                freeCompilerArgs.add("-Xpartial-linkage-loglevel=ERROR")
+            }
+        }
+    }
 
     sourceSets {
         val commonMain by getting
