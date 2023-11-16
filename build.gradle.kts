@@ -45,4 +45,9 @@ allprojects {
             )
         }
     }
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile>().configureEach { // for JS
+        compilerOptions {
+            freeCompilerArgs.add("-Xpartial-linkage-loglevel=ERROR")
+        }
+    }
 }

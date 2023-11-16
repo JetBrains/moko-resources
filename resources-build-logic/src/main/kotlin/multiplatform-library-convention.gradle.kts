@@ -23,6 +23,13 @@ kotlin {
         browser()
         useCommonJs()
     }
+    targets.all { // for Native
+        compilations.all {
+            compilerOptions.configure {
+                freeCompilerArgs.add("-Xpartial-linkage-loglevel=ERROR")
+            }
+        }
+    }
 
     sourceSets {
         val iosMain by getting
