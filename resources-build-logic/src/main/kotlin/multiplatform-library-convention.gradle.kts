@@ -15,7 +15,8 @@ plugins {
 kotlin {
     jvm()
     android()
-    ios()
+    iosX64()
+    iosArm64()
     iosSimulatorArm64()
     macosX64()
     macosArm64()
@@ -32,15 +33,27 @@ kotlin {
     }
 
     sourceSets {
-        val iosMain by getting
-        val iosSimulatorArm64Main by getting
-        iosSimulatorArm64Main.dependsOn(iosMain)
-
-        val iosTest by getting
-        val iosSimulatorArm64Test by getting
-        iosSimulatorArm64Test.dependsOn(iosTest)
-
         val commonMain by getting
+        val commonTest by getting
+
+        val iosMain by creating
+        val iosX64Main by getting
+        val iosArm64Main by getting
+        val iosSimulatorArm64Main by getting
+        iosX64Main.dependsOn(iosMain)
+        iosArm64Main.dependsOn(iosMain)
+        iosSimulatorArm64Main.dependsOn(iosMain)
+        iosMain.dependsOn(commonMain)
+
+        val iosTest by creating
+        val iosX64Test by getting
+        val iosArm64Test by getting
+        val iosSimulatorArm64Test by getting
+        iosX64Test.dependsOn(iosTest)
+        iosArm64Test.dependsOn(iosTest)
+        iosSimulatorArm64Test.dependsOn(iosTest)
+        iosTest.dependsOn(commonTest)
+
         val macosMain by creating
         val macosArm64Main by getting
         val macosX64Main by getting
@@ -48,7 +61,6 @@ kotlin {
         macosX64Main.dependsOn(macosMain)
         macosMain.dependsOn(commonMain)
 
-        val commonTest by getting
         val macosTest by creating
         val macosArm64Test by getting
         val macosX64Test by getting
