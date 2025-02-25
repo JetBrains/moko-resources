@@ -110,7 +110,7 @@ class AppleMRGenerator(
     }
 
     private fun setupKLibResources(generationTask: Task) {
-        val compileTask: KotlinNativeCompile = compilation.compileKotlinTask
+        val compileTask: KotlinNativeCompile = compilation.compileTaskProvider.get()
         compileTask.dependsOn(generationTask)
 
         // tasks like compileIosMainKotlinMetadata when only one target enabled
@@ -138,7 +138,7 @@ class AppleMRGenerator(
             .configureEach { binary ->
                 val framework = binary as Framework
 
-                val linkTask = framework.linkTask
+                val linkTask = framework.linkTaskProvider.get()
 
                 linkTask.doLast(CopyResourcesFromKLibsToFrameworkAction())
 
@@ -206,7 +206,7 @@ $linkTask produces static framework, Xcode should have Build Phase with copyFram
             .matching { it is TestExecutable && it.compilation.associateWith.contains(compilation) }
             .configureEach {
                 val executable = it as TestExecutable
-                val linkTask = executable.linkTask
+                val linkTask = executable.linkTaskProvider.get()
 
                 linkTask.doLast(CopyResourcesFromKLibsToExecutableAction())
             }
