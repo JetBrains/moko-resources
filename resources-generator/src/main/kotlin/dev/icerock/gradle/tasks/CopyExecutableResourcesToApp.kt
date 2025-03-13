@@ -9,9 +9,11 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
 import org.jetbrains.kotlin.gradle.tasks.KotlinNativeLink
-import org.jetbrains.kotlin.library.impl.KotlinLibraryLayoutImpl
+import org.jetbrains.kotlin.konan.file.createTempDir
+import org.jetbrains.kotlin.konan.file.unzipTo
 import java.io.File
 import java.io.FileFilter
+import org.jetbrains.kotlin.konan.file.File as KFile
 
 open class CopyExecutableResourcesToApp : DefaultTask() {
     @get:Internal
@@ -34,13 +36,14 @@ open class CopyExecutableResourcesToApp : DefaultTask() {
             .filter { library -> library.extension == "klib" }
             .filter(File::exists)
             .forEach { inputFile ->
-                val klibKonan = org.jetbrains.kotlin.konan.file.File(inputFile.path)
-                val klib = KotlinLibraryLayoutImpl(klib = klibKonan, component = "default")
-                val layout = klib.extractingToTemp
+                val klibFile = KFile(inputFile.path)
+
+                val extractedResourcesDir = createTempDir(klibFile.name)
+                extractedResourcesDir.deleteOnExitRecursively()
+                klibFile.unzipTo(extractedResourcesDir, fromSubdirectory = KFile("/default/resources"))
 
                 // extracting bundles
-                layout
-                    .resourcesDir
+                extractedResourcesDir
                     .absolutePath
                     .let(::File)
                     .listFiles(FileFilter { it.extension == "bundle" })

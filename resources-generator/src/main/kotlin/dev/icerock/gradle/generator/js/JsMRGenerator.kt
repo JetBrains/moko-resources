@@ -21,8 +21,10 @@ import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.targets.js.ir.KotlinJsIrCompilation
 import org.jetbrains.kotlin.gradle.targets.js.ir.KotlinJsIrTarget
 import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
-import org.jetbrains.kotlin.library.impl.KotlinLibraryLayoutImpl
+import org.jetbrains.kotlin.konan.file.createTempDir
+import org.jetbrains.kotlin.konan.file.unzipTo
 import java.io.File
+import org.jetbrains.kotlin.konan.file.File as KFile
 
 class JsMRGenerator(
     generatedDir: File,
@@ -255,12 +257,15 @@ class JsMRGenerator(
             if (inputFile.exists().not()) return
 
             project.logger.info("copy resources from $inputFile into $outputDir")
-            val klibKonan = org.jetbrains.kotlin.konan.file.File(inputFile.path)
-            val klib = KotlinLibraryLayoutImpl(klib = klibKonan, component = "default")
-            val layout = klib.extractingToTemp
+
+            val klibFile = KFile(inputFile.path)
+
+            val extractedResourcesDir = createTempDir(klibFile.name)
+            extractedResourcesDir.deleteOnExitRecursively()
+            klibFile.unzipTo(extractedResourcesDir, fromSubdirectory = KFile("/default/resources"))
 
             try {
-                File(layout.resourcesDir.path, "moko-resources-js").copyRecursively(
+                File(extractedResourcesDir.path, "moko-resources-js").copyRecursively(
                     target = outputDir,
                     overwrite = true
                 )

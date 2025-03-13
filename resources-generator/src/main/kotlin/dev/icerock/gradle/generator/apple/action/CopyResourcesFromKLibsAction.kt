@@ -10,8 +10,10 @@ import org.gradle.api.Project
 import org.gradle.api.Task
 import org.jetbrains.kotlin.gradle.plugin.mpp.Framework
 import org.jetbrains.kotlin.gradle.tasks.KotlinNativeLink
-import org.jetbrains.kotlin.library.impl.KotlinLibraryLayoutImpl
+import org.jetbrains.kotlin.konan.file.createTempDir
+import org.jetbrains.kotlin.konan.file.unzipTo
 import java.io.File
+import org.jetbrains.kotlin.konan.file.File as KFile
 
 internal abstract class CopyResourcesFromKLibsAction : Action<Task> {
 
@@ -36,12 +38,15 @@ internal abstract class CopyResourcesFromKLibsAction : Action<Task> {
             .filter { it.exists() }
             .forEach { inputFile ->
                 project.logger.info("copy resources from $inputFile into $outputDir")
-                val klibKonan = org.jetbrains.kotlin.konan.file.File(inputFile.path)
-                val klib = KotlinLibraryLayoutImpl(klib = klibKonan, component = "default")
-                val layout = klib.extractingToTemp
+
+                val klibFile = KFile(inputFile.path)
+
+                val extractedResourcesDir = createTempDir(klibFile.name)
+                extractedResourcesDir.deleteOnExitRecursively()
+                klibFile.unzipTo(extractedResourcesDir, fromSubdirectory = KFile("/default/resources"))
 
                 try {
-                    File(layout.resourcesDir.path).copyRecursively(
+                    File(extractedResourcesDir.path).copyRecursively(
                         target = outputDir,
                         overwrite = true
                     )
