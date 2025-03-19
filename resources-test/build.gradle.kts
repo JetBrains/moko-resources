@@ -45,6 +45,10 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
             freeCompilerArgs += listOf("-api-version", it)
         }
     }
+    kotlinOptions {
+        freeCompilerArgs += listOf("-Xreport-all-warnings")
+        freeCompilerArgs += listOf("-Xrender-internal-diagnostic-names")
+    }
     kotlin_additional_cli_options?.let {
         kotlinOptions {
             freeCompilerArgs += it.split(" ")
@@ -62,6 +66,10 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile>().configur
         kotlinOptions {
             freeCompilerArgs += listOf("-api-version", it)
         }
+    }
+    kotlinOptions {
+        freeCompilerArgs += listOf("-Xreport-all-warnings")
+        freeCompilerArgs += listOf("-Xrender-internal-diagnostic-names")
     }
     kotlin_additional_cli_options?.let {
         kotlinOptions {
@@ -81,6 +89,10 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile>().configureEa
             freeCompilerArgs += listOf("-api-version", it)
         }
     }
+    kotlinOptions {
+        freeCompilerArgs += listOf("-Xreport-all-warnings")
+        freeCompilerArgs += listOf("-Xrender-internal-diagnostic-names")
+    }
     kotlin_additional_cli_options?.let {
         kotlinOptions {
             freeCompilerArgs += it.split(" ")
@@ -98,6 +110,10 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompileCommon>().configur
         kotlinOptions {
             freeCompilerArgs += listOf("-api-version", it)
         }
+    }
+    kotlinOptions {
+        freeCompilerArgs += listOf("-Xreport-all-warnings")
+        freeCompilerArgs += listOf("-Xrender-internal-diagnostic-names")
     }
     kotlin_additional_cli_options?.let {
         kotlinOptions {
