@@ -72,6 +72,7 @@ kotlin {
 
 val kotlin_language_version: String? by project
 val kotlin_api_version: String? by project
+val kotlin_additional_cli_options: String? by project
 println("[QG] The build uses custom LanguageVersion: $kotlin_language_version and ApiVersion: $kotlin_api_version")
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
@@ -92,6 +93,11 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
     kotlin_api_version?.let {
         kotlinOptions {
             freeCompilerArgs += listOf("-api-version", it)
+        }
+    }
+    kotlin_additional_cli_options?.let {
+        kotlinOptions {
+            freeCompilerArgs += it.split(" ")
         }
     }
 }
@@ -116,6 +122,11 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile>().configur
             freeCompilerArgs += listOf("-api-version", it)
         }
     }
+    kotlin_additional_cli_options?.let {
+        kotlinOptions {
+            freeCompilerArgs += it.split(" ")
+        }
+    }
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile>().configureEach {
@@ -138,6 +149,11 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile>().configureEa
             freeCompilerArgs += listOf("-api-version", it)
         }
     }
+    kotlin_additional_cli_options?.let {
+        kotlinOptions {
+            freeCompilerArgs += it.split(" ")
+        }
+    }
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompileCommon>().configureEach {
@@ -158,6 +174,11 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompileCommon>().configur
     kotlin_api_version?.let {
         kotlinOptions {
             freeCompilerArgs += listOf("-api-version", it)
+        }
+    }
+    kotlin_additional_cli_options?.let {
+        kotlinOptions {
+            freeCompilerArgs += it.split(" ")
         }
     }
 }
