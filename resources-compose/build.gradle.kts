@@ -83,32 +83,34 @@ println("[QG] The build uses custom LanguageVersion: $kotlin_language_version an
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
     val kotlin_version: String? by project
     kotlin_version?.let {
-        kotlinOptions {
-            freeCompilerArgs += listOf(
+        compilerOptions {
+            freeCompilerArgs.addAll(
                 "-P",
                 "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=$it"
             )
         }
     }
     kotlin_language_version?.let {
-        kotlinOptions {
-            freeCompilerArgs += listOf("-language-version", it)
+        compilerOptions {
+            freeCompilerArgs.addAll("-language-version", it)
         }
     }
     kotlin_api_version?.let {
-        kotlinOptions {
-            freeCompilerArgs += listOf("-api-version", it)
+        compilerOptions {
+            freeCompilerArgs.addAll("-api-version", it)
         }
     }
-    kotlinOptions {
-        freeCompilerArgs += listOf("-Xreport-all-warnings")
-        freeCompilerArgs += listOf("-Xrender-internal-diagnostic-names")
-        freeCompilerArgs += listOf("-Wextra")
-        freeCompilerArgs += listOf("-Xuse-fir-experimental-checkers")
+    compilerOptions {
+        freeCompilerArgs.addAll(
+            "-Xreport-all-warnings",
+            "-Xrender-internal-diagnostic-names",
+            "-Wextra",
+            "-Xuse-fir-experimental-checkers"
+        )
     }
     kotlin_additional_cli_options?.let {
-        kotlinOptions {
-            freeCompilerArgs += it.split(" ")
+        compilerOptions {
+            freeCompilerArgs.addAll(it.split(" "))
         }
     }
 }
@@ -116,32 +118,34 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile>().configureEach {
     val kotlin_version: String? by project
     kotlin_version?.let {
-        kotlinOptions {
-            freeCompilerArgs += listOf(
+        compilerOptions {
+            freeCompilerArgs.addAll(
                 "-P",
                 "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=$it"
             )
         }
     }
     kotlin_language_version?.let {
-        kotlinOptions {
-            freeCompilerArgs += listOf("-language-version", it)
+        compilerOptions {
+            freeCompilerArgs.addAll("-language-version", it)
         }
     }
     kotlin_api_version?.let {
-        kotlinOptions {
-            freeCompilerArgs += listOf("-api-version", it)
+        compilerOptions {
+            freeCompilerArgs.addAll("-api-version", it)
         }
     }
-    kotlinOptions {
-        freeCompilerArgs += listOf("-Xreport-all-warnings")
-        freeCompilerArgs += listOf("-Xrender-internal-diagnostic-names")
-        freeCompilerArgs += listOf("-Wextra")
-        freeCompilerArgs += listOf("-Xuse-fir-experimental-checkers")
+    compilerOptions {
+        freeCompilerArgs.addAll(
+            "-Xreport-all-warnings",
+            "-Xrender-internal-diagnostic-names",
+            "-Wextra",
+            "-Xuse-fir-experimental-checkers"
+        )
     }
     kotlin_additional_cli_options?.let {
-        kotlinOptions {
-            freeCompilerArgs += it.split(" ")
+        compilerOptions {
+            freeCompilerArgs.addAll(it.split(" "))
         }
     }
 }
@@ -149,32 +153,34 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile>().configur
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile>().configureEach {
     val kotlin_version: String? by project
     kotlin_version?.let {
-        kotlinOptions {
-            freeCompilerArgs += listOf(
+        compilerOptions {
+            freeCompilerArgs.addAll(
                 "-P",
                 "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=$it"
             )
         }
     }
     kotlin_language_version?.let {
-        kotlinOptions {
-            freeCompilerArgs += listOf("-language-version", it)
+        compilerOptions {
+            freeCompilerArgs.addAll("-language-version", it)
         }
     }
     kotlin_api_version?.let {
-        kotlinOptions {
-            freeCompilerArgs += listOf("-api-version", it)
+        compilerOptions {
+            freeCompilerArgs.addAll("-api-version", it)
         }
     }
-    kotlinOptions {
-        freeCompilerArgs += listOf("-Xreport-all-warnings")
-        freeCompilerArgs += listOf("-Xrender-internal-diagnostic-names")
-        freeCompilerArgs += listOf("-Wextra")
-        freeCompilerArgs += listOf("-Xuse-fir-experimental-checkers")
+    compilerOptions {
+        freeCompilerArgs.addAll(
+            "-Xreport-all-warnings",
+            "-Xrender-internal-diagnostic-names",
+            "-Wextra",
+            "-Xuse-fir-experimental-checkers"
+        )
     }
     kotlin_additional_cli_options?.let {
-        kotlinOptions {
-            freeCompilerArgs += it.split(" ")
+        compilerOptions {
+            freeCompilerArgs.addAll(it.split(" "))
         }
     }
 }
@@ -182,32 +188,34 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile>().configureEa
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompileCommon>().configureEach {
     val kotlin_version: String? by project
     kotlin_version?.let {
-        kotlinOptions {
-            freeCompilerArgs += listOf(
+        compilerOptions {
+            freeCompilerArgs.addAll(
                 "-P",
                 "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=$it"
             )
         }
     }
     kotlin_language_version?.let {
-        kotlinOptions {
-            freeCompilerArgs += listOf("-language-version", it)
+        compilerOptions {
+            freeCompilerArgs.addAll("-language-version", it)
         }
     }
     kotlin_api_version?.let {
-        kotlinOptions {
-            freeCompilerArgs += listOf("-api-version", it)
+        compilerOptions {
+            freeCompilerArgs.addAll("-api-version", it)
         }
     }
-    kotlinOptions {
-        freeCompilerArgs += listOf("-Xreport-all-warnings")
-        freeCompilerArgs += listOf("-Xrender-internal-diagnostic-names")
-        freeCompilerArgs += listOf("-Wextra")
-        freeCompilerArgs += listOf("-Xuse-fir-experimental-checkers")
+    compilerOptions {
+        freeCompilerArgs.addAll(
+            "-Xreport-all-warnings",
+            "-Xrender-internal-diagnostic-names",
+            "-Wextra",
+            "-Xuse-fir-experimental-checkers"
+        )
     }
     kotlin_additional_cli_options?.let {
-        kotlinOptions {
-            freeCompilerArgs += it.split(" ")
+        compilerOptions {
+            freeCompilerArgs.addAll(it.split(" "))
         }
     }
 }
