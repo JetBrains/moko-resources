@@ -38,10 +38,10 @@ allprojects {
     }
 
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile>().configureEach {
-        kotlinOptions {
-            freeCompilerArgs += listOf(
-                    "-opt-in",
-                    "kotlinx.cinterop.ExperimentalForeignApi",
+        compilerOptions {
+            freeCompilerArgs.addAll(
+                "-opt-in",
+                "kotlinx.cinterop.ExperimentalForeignApi"
             )
         }
     }
