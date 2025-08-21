@@ -49,8 +49,6 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
         freeCompilerArgs.addAll(
             "-Xreport-all-warnings",
             "-Xrender-internal-diagnostic-names",
-            "-Wextra",
-            "-Xuse-fir-experimental-checkers"
         )
     }
     kotlin_additional_cli_options?.let {
@@ -75,8 +73,6 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile>().configur
         freeCompilerArgs.addAll(
             "-Xreport-all-warnings",
             "-Xrender-internal-diagnostic-names",
-            "-Wextra",
-            "-Xuse-fir-experimental-checkers"
         )
     }
     kotlin_additional_cli_options?.let {
@@ -101,8 +97,6 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile>().configureEa
         freeCompilerArgs.addAll(
             "-Xreport-all-warnings",
             "-Xrender-internal-diagnostic-names",
-            "-Wextra",
-            "-Xuse-fir-experimental-checkers"
         )
     }
     kotlin_additional_cli_options?.let {
@@ -127,8 +121,6 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompileCommon>().configur
         freeCompilerArgs.addAll(
             "-Xreport-all-warnings",
             "-Xrender-internal-diagnostic-names",
-            "-Wextra",
-            "-Xuse-fir-experimental-checkers"
         )
     }
     kotlin_additional_cli_options?.let {
