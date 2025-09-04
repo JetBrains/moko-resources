@@ -203,7 +203,7 @@ $linkTask produces static framework, Xcode should have Build Phase with copyFram
         val kotlinNativeTarget = compilation.target as KotlinNativeTarget
 
         kotlinNativeTarget.binaries
-            .matching { it is TestExecutable && it.compilation.associateWith.contains(compilation) }
+            .matching { it is TestExecutable && it.compilation == compilation }
             .configureEach {
                 val executable = it as TestExecutable
                 val linkTask = executable.linkTaskProvider.get()
