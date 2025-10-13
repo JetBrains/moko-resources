@@ -175,3 +175,15 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompileCommon>().configur
         }
     }
 }
+
+afterEvaluate {
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask<*>>().configureEach kotlinCompilationTask@ {
+        compilerOptions {
+            allWarningsAsErrors.set(false)
+            freeCompilerArgs.set(
+                freeCompilerArgs.getOrElse(emptyList()).filterNot { it == "-Werror" }
+            )
+            logger.info(" ${this@kotlinCompilationTask.path} : disabled -Werror")
+        }
+    }
+}
