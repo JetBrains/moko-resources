@@ -97,7 +97,7 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
             "-Xrender-internal-diagnostic-names",
         )
     }
-    kotlin_additional_cli_options?.let {
+    kotlin_additional_cli_options?.takeIf { it.isNotEmpty() }?.let {
         compilerOptions {
             freeCompilerArgs.addAll(it.split(" "))
         }
@@ -121,7 +121,7 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile>().configur
             "-Xrender-internal-diagnostic-names",
         )
     }
-    kotlin_additional_cli_options?.let {
+    kotlin_additional_cli_options?.takeIf { it.isNotEmpty() }?.let {
         compilerOptions {
             freeCompilerArgs.addAll(it.split(" "))
         }
@@ -145,7 +145,7 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile>().configureEa
             "-Xrender-internal-diagnostic-names",
         )
     }
-    kotlin_additional_cli_options?.let {
+    kotlin_additional_cli_options?.takeIf { it.isNotEmpty() }?.let {
         compilerOptions {
             freeCompilerArgs.addAll(it.split(" "))
         }
@@ -169,7 +169,7 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompileCommon>().configur
             "-Xrender-internal-diagnostic-names",
         )
     }
-    kotlin_additional_cli_options?.let {
+    kotlin_additional_cli_options?.takeIf { it.isNotEmpty() }?.let {
         compilerOptions {
             freeCompilerArgs.addAll(it.split(" "))
         }
