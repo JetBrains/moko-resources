@@ -21,10 +21,17 @@ import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.targets.js.ir.KotlinJsIrCompilation
 import org.jetbrains.kotlin.gradle.targets.js.ir.KotlinJsIrTarget
 import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
-import org.jetbrains.kotlin.konan.file.createTempDir
-import org.jetbrains.kotlin.konan.file.unzipTo
 import java.io.File
-import org.jetbrains.kotlin.konan.file.File as KFile
+import kotlin.io.path.createTempDirectory
+import java.nio.file.Paths
+import java.nio.file.Path
+import kotlin.io.path.pathString
+import kotlin.io.path.exists
+import org.jetbrains.kotlin.io.unzipTo
+import java.nio.file.FileVisitResult
+import java.nio.file.Files
+import java.nio.file.SimpleFileVisitor
+import java.nio.file.attribute.BasicFileAttributes
 
 class JsMRGenerator(
     generatedDir: File,
@@ -258,14 +265,14 @@ class JsMRGenerator(
 
             project.logger.info("copy resources from $inputFile into $outputDir")
 
-            val klibFile = KFile(inputFile.path)
+            val klibFile = Paths.get(inputFile.path)
 
-            val extractedResourcesDir = createTempDir(klibFile.name)
+            val extractedResourcesDir = createTempDirectory()
             extractedResourcesDir.deleteOnExitRecursively()
-            klibFile.unzipTo(extractedResourcesDir, fromSubdirectory = KFile("/default/resources"))
+            klibFile.unzipTo(extractedResourcesDir, fromSubdirectory = Paths.get("/default/resources"))
 
             try {
-                File(extractedResourcesDir.path, "moko-resources-js").copyRecursively(
+                File(extractedResourcesDir.pathString, "moko-resources-js").copyRecursively(
                     target = outputDir,
                     overwrite = true
                 )
@@ -285,5 +292,21 @@ class JsMRGenerator(
         const val STRINGS_FALLBACK_FILE_URL_PROPERTY_NAME = "stringsFallbackFileUrl"
         const val PLURALS_FALLBACK_FILE_URL_PROPERTY_NAME = "stringsFallbackFileUrl"
         const val LOCALIZATION_DIR = "localization"
+
+        private fun Path.deleteOnExitRecursively() {
+            if (!exists()) return
+
+            Files.walkFileTree(this, object : SimpleFileVisitor<Path>() {
+                override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
+                    file.toFile().deleteOnExit()
+                    return FileVisitResult.CONTINUE
+                }
+
+                override fun preVisitDirectory(dir: Path, attrs: BasicFileAttributes): FileVisitResult {
+                    dir.toFile().deleteOnExit()
+                    return FileVisitResult.CONTINUE
+                }
+            })
+        }
     }
 }

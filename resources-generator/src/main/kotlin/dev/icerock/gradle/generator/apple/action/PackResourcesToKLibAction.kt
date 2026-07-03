@@ -9,8 +9,9 @@ import dev.icerock.gradle.utils.unzipTo
 import org.gradle.api.Action
 import org.gradle.api.Task
 import org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile
-import org.jetbrains.kotlin.konan.file.zipDirAs
+import org.jetbrains.kotlin.io.zipDirAs
 import java.io.File
+import java.nio.file.Paths
 import java.util.Properties
 
 internal class PackResourcesToKLibAction(
@@ -65,8 +66,8 @@ internal class PackResourcesToKLibAction(
             overwrite = true
         )
 
-        val repackKonan = org.jetbrains.kotlin.konan.file.File(repackDir.path)
-        val klibKonan = org.jetbrains.kotlin.konan.file.File(klibFile.path)
+        val repackKonan = Paths.get(repackDir.path)
+        val klibKonan = Paths.get(klibFile.path)
 
         klibFile.delete()
         repackKonan.zipDirAs(klibKonan)

@@ -9,11 +9,11 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
 import org.jetbrains.kotlin.gradle.tasks.KotlinNativeLink
-import org.jetbrains.kotlin.konan.file.createTempDir
-import org.jetbrains.kotlin.konan.file.unzipTo
 import java.io.File
 import java.io.FileFilter
-import org.jetbrains.kotlin.konan.file.File as KFile
+import kotlin.io.path.absolutePathString
+import org.jetbrains.kotlin.library.loader.KlibLoader
+import dev.icerock.gradle.generator.apple.action.KlibResourcesComponent
 
 open class CopyExecutableResourcesToApp : DefaultTask() {
     @get:Internal
@@ -36,15 +36,13 @@ open class CopyExecutableResourcesToApp : DefaultTask() {
             .filter { library -> library.extension == "klib" }
             .filter(File::exists)
             .forEach { inputFile ->
-                val klibFile = KFile(inputFile.path)
-
-                val extractedResourcesDir = createTempDir(klibFile.name)
-                extractedResourcesDir.deleteOnExitRecursively()
-                klibFile.unzipTo(extractedResourcesDir, fromSubdirectory = KFile("/default/resources"))
+                val library = KlibLoader { libraryPaths(inputFile.path) }.load().librariesStdlibFirst.single()
+                val component = library.getComponent(KlibResourcesComponent.Kind)!!
 
                 // extracting bundles
-                extractedResourcesDir
-                    .absolutePath
+                component
+                    .resourcesDir
+                    .absolutePathString()
                     .let(::File)
                     .listFiles(FileFilter { it.extension == "bundle" })
                     // copying bundles to app

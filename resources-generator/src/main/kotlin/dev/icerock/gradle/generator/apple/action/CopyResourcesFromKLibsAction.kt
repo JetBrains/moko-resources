@@ -10,10 +10,19 @@ import org.gradle.api.Project
 import org.gradle.api.Task
 import org.jetbrains.kotlin.gradle.plugin.mpp.Framework
 import org.jetbrains.kotlin.gradle.tasks.KotlinNativeLink
-import org.jetbrains.kotlin.konan.file.createTempDir
-import org.jetbrains.kotlin.konan.file.unzipTo
+import org.jetbrains.kotlin.library.loader.KlibLoader
+import org.jetbrains.kotlin.library.KlibComponent
+import org.jetbrains.kotlin.library.KlibComponentLayout
+import org.jetbrains.kotlin.library.KlibConstants.KLIB_DEFAULT_COMPONENT_NAME
+import org.jetbrains.kotlin.library.KlibConstants.KLIB_RESOURCES_FOLDER_NAME
+import org.jetbrains.kotlin.library.KlibLayoutReader
 import java.io.File
-import org.jetbrains.kotlin.konan.file.File as KFile
+import java.nio.file.Path
+import kotlin.io.path.isDirectory
+import kotlin.io.path.pathString
+import kotlin.io.path.extension
+import kotlin.io.path.exists
+import kotlin.io.path.listDirectoryEntries
 
 internal abstract class CopyResourcesFromKLibsAction : Action<Task> {
 
@@ -39,14 +48,11 @@ internal abstract class CopyResourcesFromKLibsAction : Action<Task> {
             .forEach { inputFile ->
                 project.logger.info("copy resources from $inputFile into $outputDir")
 
-                val klibFile = KFile(inputFile.path)
-
-                val extractedResourcesDir = createTempDir(klibFile.name)
-                extractedResourcesDir.deleteOnExitRecursively()
-                klibFile.unzipTo(extractedResourcesDir, fromSubdirectory = KFile("/default/resources"))
+                val library = KlibLoader { libraryPaths(inputFile.path) }.load().librariesStdlibFirst.single()
+                val component = library.getComponent(KlibResourcesComponent.Kind)!!
 
                 try {
-                    File(extractedResourcesDir.path).copyRecursively(
+                    File(component.resourcesDir.pathString).copyRecursively(
                         target = outputDir,
                         overwrite = true
                     )
@@ -57,4 +63,23 @@ internal abstract class CopyResourcesFromKLibsAction : Action<Task> {
                 }
             }
     }
+}
+
+internal class KlibResourcesComponent(
+    private val layoutReader: KlibLayoutReader<KlibResourcesComponentLayout>
+) : KlibComponent {
+    val resourcesDir: Path
+        get() = layoutReader.readExtractingToTemp(KlibResourcesComponentLayout::resourcesDir)
+
+    object Kind : KlibComponent.Kind<KlibResourcesComponent, KlibResourcesComponentLayout> {
+        override fun createLayout(root: Path) = KlibResourcesComponentLayout(root)
+
+        override fun createComponentIfDataInKlibIsAvailable(layoutReader: KlibLayoutReader<KlibResourcesComponentLayout>) =
+            if (layoutReader.readInPlaceOrFallback(false) { it.resourcesDir.exists() }) KlibResourcesComponent(layoutReader) else null
+    }
+}
+
+internal class KlibResourcesComponentLayout(root: Path) : KlibComponentLayout(root) {
+    val resourcesDir: Path
+        get() = root.resolve(KLIB_DEFAULT_COMPONENT_NAME).resolve(KLIB_RESOURCES_FOLDER_NAME)
 }
