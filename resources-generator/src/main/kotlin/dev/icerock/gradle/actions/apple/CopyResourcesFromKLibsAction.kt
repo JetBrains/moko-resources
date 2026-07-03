@@ -4,15 +4,23 @@
 
 package dev.icerock.gradle.actions.apple
 
-import dev.icerock.gradle.data.ExtractingBaseLibraryImpl
 import dev.icerock.gradle.utils.klibs
 import org.gradle.api.Action
 import org.gradle.api.Task
 import org.gradle.api.logging.Logger
 import org.jetbrains.kotlin.gradle.tasks.KotlinNativeLink
-import org.jetbrains.kotlin.library.KotlinLibraryLayout
-import org.jetbrains.kotlin.library.impl.KotlinLibraryLayoutImpl
+import org.jetbrains.kotlin.library.loader.KlibLoader
+import org.jetbrains.kotlin.library.KlibComponent
+import org.jetbrains.kotlin.library.KlibComponentLayout
+import org.jetbrains.kotlin.library.KlibConstants.KLIB_DEFAULT_COMPONENT_NAME
+import org.jetbrains.kotlin.library.KlibConstants.KLIB_RESOURCES_FOLDER_NAME
+import org.jetbrains.kotlin.library.KlibLayoutReader
 import java.io.File
+import java.nio.file.Path
+import kotlin.io.path.isDirectory
+import kotlin.io.path.extension
+import kotlin.io.path.exists
+import kotlin.io.path.listDirectoryEntries
 
 internal abstract class CopyResourcesFromKLibsAction : Action<Task> {
 
@@ -65,24 +73,28 @@ internal abstract class CopyResourcesFromKLibsAction : Action<Task> {
         }
     }
 
-    private fun getBundlesFromKotlinLibrary(
-        klibFile: File
-    ): List<File> {
-        val layout: KotlinLibraryLayout = getKotlinLibraryLayout(klibFile)
-        return layout.resourcesDir.listFilesOrEmpty
-            .filter { it.isDirectory && it.extension == "bundle" }
-            .map { File(it.path) }
+    private fun getBundlesFromKotlinLibrary(klibFile: File): List<File> {
+        val library = KlibLoader { libraryPaths(klibFile) }.load().librariesStdlibFirst.singleOrNull() ?: return emptyList()
+        val component = library.getComponent(KlibResourcesComponent.Kind) ?: return emptyList()
+        return component.resourcesDir.listDirectoryEntries().filter { it.isDirectory() && it.extension == "bundle" }.map { it.toFile() }
     }
+}
 
-    private fun getKotlinLibraryLayout(file: File): KotlinLibraryLayout {
-        val klibKonan = org.jetbrains.kotlin.konan.file.File(file.path)
-        val klib = KotlinLibraryLayoutImpl(klib = klibKonan, component = "default")
+internal class KlibResourcesComponent(
+    private val layoutReader: KlibLayoutReader<KlibResourcesComponentLayout>
+) : KlibComponent {
+    val resourcesDir: Path
+        get() = layoutReader.readExtractingToTemp(KlibResourcesComponentLayout::resourcesDir)
 
-        // while klib zipped we can't check resources directory, so we should unpack all klibs :(
-        // maybe will be better if we will write some state in cache as build result file with
-        // klib path, hash, resources count. to not extract klibs that we already know that not
-        // contains any resources. BUT maybe extraction will be faster then hashing for this logic.
-        // so this improvement should be checked in future
-        return if (klib.isZipped) ExtractingBaseLibraryImpl(klib) else klib
+    object Kind : KlibComponent.Kind<KlibResourcesComponent, KlibResourcesComponentLayout> {
+        override fun createLayout(root: Path) = KlibResourcesComponentLayout(root)
+
+        override fun createComponentIfDataInKlibIsAvailable(layoutReader: KlibLayoutReader<KlibResourcesComponentLayout>) =
+            if (layoutReader.readInPlaceOrFallback(false) { it.resourcesDir.exists() }) KlibResourcesComponent(layoutReader) else null
     }
+}
+
+internal class KlibResourcesComponentLayout(root: Path) : KlibComponentLayout(root) {
+    val resourcesDir: Path
+        get() = root.resolve(KLIB_DEFAULT_COMPONENT_NAME).resolve(KLIB_RESOURCES_FOLDER_NAME)
 }

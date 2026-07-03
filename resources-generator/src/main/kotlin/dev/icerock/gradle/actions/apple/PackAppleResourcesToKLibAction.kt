@@ -12,10 +12,10 @@ import org.gradle.api.GradleException
 import org.gradle.api.Task
 import org.gradle.api.provider.Provider
 import org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile
-import org.jetbrains.kotlin.konan.file.zipDirAs
 import java.io.File
+import java.nio.file.Paths
 import java.util.Properties
-import org.jetbrains.kotlin.konan.file.File as KonanFile
+import org.jetbrains.kotlin.io.zipDirAs
 
 internal class PackAppleResourcesToKLibAction(
     private val assetsDirectory: Provider<File>,
@@ -66,8 +66,8 @@ internal class PackAppleResourcesToKLibAction(
                 task = task
             )
 
-            val repackKonan = KonanFile(repackDir.path)
-            val klibKonan = KonanFile(klibFile.path)
+            val repackKonan = Paths.get(repackDir.path)
+            val klibKonan = Paths.get(klibFile.path)
 
             klibFile.delete()
             repackKonan.zipDirAs(klibKonan)

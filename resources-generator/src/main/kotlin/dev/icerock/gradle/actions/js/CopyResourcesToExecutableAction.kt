@@ -4,14 +4,13 @@
 
 package dev.icerock.gradle.actions.js
 
-import dev.icerock.gradle.data.ExtractingBaseLibraryImpl
+import dev.icerock.gradle.actions.apple.KlibResourcesComponent
+import org.jetbrains.kotlin.library.loader.KlibLoader
 import dev.icerock.gradle.utils.klibs
 import org.gradle.api.Action
 import org.gradle.api.logging.Logger
 import org.gradle.api.provider.Provider
 import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
-import org.jetbrains.kotlin.library.KotlinLibraryLayout
-import org.jetbrains.kotlin.library.impl.KotlinLibraryLayoutImpl
 import java.io.File
 
 internal class CopyResourcesToExecutableAction(
@@ -127,16 +126,12 @@ internal class CopyResourcesToExecutableAction(
         if (inputFile.exists().not()) return
 
         logger.info("copy resources from $inputFile into $outputDir")
-        val klibKonan = org.jetbrains.kotlin.konan.file.File(inputFile.path)
-        val klib = KotlinLibraryLayoutImpl(klib = klibKonan, component = "default")
-        val layout: KotlinLibraryLayout = if (klib.isZipped) {
-            ExtractingBaseLibraryImpl(klib)
-        } else {
-            klib
-        }
+
+        val library = KlibLoader { libraryPaths(inputFile.path) }.load().librariesStdlibFirst.single()
+        val component = library.getComponent(KlibResourcesComponent.Kind)!!
 
         try {
-            File(layout.resourcesDir.path, "moko-resources-js").copyRecursively(
+            component.resourcesDir.resolve("moko-resources-js").toFile().copyRecursively(
                 target = outputDir,
                 overwrite = true
             )
