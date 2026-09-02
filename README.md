@@ -5,7 +5,6 @@
 ![badge][badge-iosArm64]
 ![badge][badge-iosSimulatorArm64]
 ![badge][badge-macosArm64]
-![badge][badge-macosX64]
 ![badge][badge-jvm]
 ![badge][badge-js]
 
@@ -867,7 +866,5 @@ For more details on contributing please see the [contributing guide](CONTRIBUTIN
 [badge-iosArm64]: https://img.shields.io/badge/platform-iosArm64-CDCDCD?style=flat
 
 [badge-iosSimulatorArm64]: https://img.shields.io/badge/platform-iosSimulatorArm64-CDCDCD?style=flat
-
-[badge-macosX64]: https://img.shields.io/badge/platform-macosX64-111111?style=flat
 
 [badge-macosArm64]: https://img.shields.io/badge/platform-macosArm64-111111?style=flat    

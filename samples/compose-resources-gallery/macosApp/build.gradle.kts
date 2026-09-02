@@ -12,17 +12,6 @@ plugins {
 version = "0.1.0"
 
 kotlin {
-    macosX64 {
-        binaries {
-            executable {
-                entryPoint = "main"
-                freeCompilerArgs += listOf(
-                    "-linker-option", "-framework", "-linker-option", "Metal"
-                )
-            }
-        }
-    }
-
     macosArm64 {
         binaries {
             executable {
@@ -45,7 +34,7 @@ kotlin {
 }
 
 compose.desktop.nativeApplication {
-    targets(kotlin.targets.getByName("macosX64"), kotlin.targets.getByName("macosArm64"))
+    targets(kotlin.targets.getByName("macosArm64"))
     distributions {
         targetFormats(org.jetbrains.compose.desktop.application.dsl.TargetFormat.Dmg)
         packageName = "dev.icerock.moko.resources.sample"

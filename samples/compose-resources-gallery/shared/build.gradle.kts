@@ -24,7 +24,6 @@ kotlin {
     }
 
     macosArm64()
-    macosX64()
 
     cocoapods {
         summary = "Some description for the Shared Module"
@@ -73,9 +72,6 @@ kotlin {
         }
         val macosMain by creating {
             dependsOn(commonMain)
-        }
-        val macosX64Main by getting {
-            dependsOn(macosMain)
         }
         val macosArm64Main by getting {
             dependsOn(macosMain)

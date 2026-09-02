@@ -16,7 +16,6 @@ allprojects {
             ios()
             iosSimulatorArm64()
             jvm()
-            macosX64()
             macosArm64()
             js(IR) { browser() }
 
@@ -30,9 +29,6 @@ allprojects {
 
                 val macosMain by creating {
                     dependsOn(commonMain.get())
-                }
-                val macosX64Main by getting {
-                    dependsOn(macosMain)
                 }
                 val macosArm64Main by getting {
                     dependsOn(macosMain)
